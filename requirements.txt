@@ -1,1 +1,1 @@
-jupyther
+jupyter
