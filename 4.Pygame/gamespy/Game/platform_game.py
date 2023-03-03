@@ -3,43 +3,67 @@ import pygame as pg
 pg.init()
 pg.display.set_caption("First Game")
 
-screen_height = 500
-screen_width = 500
 
-width_of_rec = 40
-height_of_rec = 60
-position_on_x = 50
-position_on_y = 50
-speed = 5
-black = (0, 0, 0)
-red = (255, 0, 0)
+class Config:
+    screen_height = 500
+    screen_width = 500
+    width_of_rec = 40
+    height_of_rec = 60
+    position_on_x = 50
+    position_on_y = 50
+    speed = 5
+    black = (0, 0, 0)
+    red = (255, 0, 0)
+    jump_count = 10
+    is_jump = True
 
 
 def draw_rectangle(screen):
-    pg.draw.rect(screen, red, (position_on_x, position_on_y, width_of_rec, height_of_rec))
+    pg.draw.rect(screen, Config.red,
+                 (Config.position_on_x, Config.position_on_y, Config.width_of_rec, Config.height_of_rec))
     pg.display.update()
 
 
 def check_lateral_move(keys):
-    if keys[pg.K_LEFT] and position_on_x > speed:
-        position_on_x -= speed
+    if keys[pg.K_LEFT] and Config.position_on_x > Config.speed:
+        Config.position_on_x -= Config.speed
 
-    if keys[pg.K_RIGHT] and position_on_x < screen_width - width_of_rec:
-        position_on_x += speed
+    if keys[pg.K_RIGHT] and Config.position_on_x < Config.screen_width - Config.width_of_rec:
+        Config.position_on_x += Config.speed
+
+
+def jump(keys):
+    if Config.is_jump:
+
+        if keys[pg.K_SPACE]:
+            Config.is_jump = False
+    else:
+        if Config.jump_count >= -10:
+            neg = 1
+            if Config.jump_count < 0:
+                neg = -1
+            Config.position_on_y -= (Config.jump_count ** 2) / 2 * neg
+            Config.jump_count -= 1
+        else:
+            Config.is_jump = True
+            Config.jump_count = 10
 
 
 def run_game():
     run = True
-    screen = pg.display.set_mode((screen_width, screen_height))
+    screen = pg.display.set_mode((Config.screen_width, Config.screen_height))
     while run:
         pg.time.delay(100)
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 run = False
+
         keys = pg.key.get_pressed()
+        jump(keys)
         check_lateral_move(keys)
         draw_rectangle(screen)
-        screen.fill(black)
+        screen.fill(Config.black)
+
     pg.quit()
 
 
