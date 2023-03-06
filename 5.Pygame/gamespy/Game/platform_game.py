@@ -1,4 +1,5 @@
 import pygame as pg
+from os import path
 
 pg.init()
 pg.display.set_caption("First Game")
@@ -7,8 +8,8 @@ pg.display.set_caption("First Game")
 class Config:
     screen_height = 500
     screen_width = 500
-    width_of_rec = 40
-    height_of_rec = 60
+    width_of_rec = 64
+    height_of_rec = 64
     position_on_x = 50
     position_on_y = 50
     speed = 5
@@ -16,6 +17,13 @@ class Config:
     red = (255, 0, 0)
     jump_count = 10
     is_jump = True
+    walkRight = [pg.image.load(path.join("Right", f'R{n}.png')) for n in range(1, 10)]
+    walkLeft = [pg.image.load(path.join("Left", f'L{n}.png')) for n in range(1, 10)]
+    char = pg.image.load('standing.png')
+    bg = pg.image.load('bg.jpg')
+    right = False
+    left = False
+    walk_count = 0
 
 
 def draw_rectangle(screen):
@@ -63,7 +71,6 @@ def run_game():
         check_lateral_move(keys)
         draw_rectangle(screen)
         screen.fill(Config.black)
-
     pg.quit()
 
 
