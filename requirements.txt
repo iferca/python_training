@@ -1,2 +1,4 @@
 jupyter
+pygame
+numpy
 Django
