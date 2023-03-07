@@ -22,6 +22,48 @@ class Player:
     standing = False
 
 
+class Enemy(object):
+    walk_right = [pg.image.load(path.join("RightE", f'R{n}E.png')) for n in range(1, 12)]
+    walk_left = [pg.image.load(path.join("LeftE", f'L{n}E.png')) for n in range(1, 12)]
+
+    def __init__(self, position_on_x, position_on_y, width, height, end):
+        self.position_on_x = position_on_x
+        self.position_on_y = position_on_y
+        self.width = width
+        self.height = height
+        self.path = [position_on_x, end]  # This will define where our enemy starts and finishes their path.
+        self.walk_count = 0
+        self.speed = 3
+
+    def draw(self, screen):
+        self.move()
+        if self.walk_count + 1 >= 33:
+            self.walk_count = 0
+
+        if self.speed > 0:
+            screen.blit(self.walk_right[self.walk_count // 3], (self.position_on_x, self.position_on_y))
+            self.walk_count += 1
+        else:
+            screen.blit(self.walk_left[self.walk_count // 3], (self.position_on_x, self.position_on_y))
+            self.walk_count += 1
+
+    def move(self):
+        if self.speed > 0:
+            if self.position_on_x < self.path[1] + self.speed:
+                self.position_on_x += self.speed
+            else:
+                self.speed = self.speed * -1
+                self.position_on_y += self.speed
+                self.walk_count = 0
+        else:
+            if self.position_on_x > self.path[0] - self.speed:
+                self.position_on_x += self.speed
+            else:
+                self.speed = self.speed * -1
+                self.position_on_x += self.speed
+                self.walk_count = 0
+
+
 class Config:
     screen_height = 500
     screen_width = 500
@@ -61,8 +103,9 @@ def draw_player(screen):
             screen.blit(Player.walk_left[0], (Player.position_on_x, Player.position_on_y))
 
 
-def draw_game(screen, bullets):
+def draw_game(screen, bullets, goblin):
     screen.blit(Config.bg, (0, 0))
+    goblin.draw(screen)
     for bullet in bullets:
         bullet.draw(screen)
     draw_player(screen)
@@ -110,6 +153,7 @@ def jump(keys):
 
 
 def run_game():
+    goblin = Enemy(100, 410, 64, 64, 300)
     bullets = []
     run = True
     screen = pg.display.set_mode((Config.screen_width, Config.screen_height))
@@ -140,7 +184,7 @@ def run_game():
                                facing))
         jump(keys)
         check_move(keys)
-        draw_game(screen, bullets)
+        draw_game(screen, bullets, goblin)
     pg.quit()
 
 
