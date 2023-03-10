@@ -1,1 +1,4 @@
 jupyter
+pygame
+numpy
+Django
