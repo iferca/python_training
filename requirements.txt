@@ -1,4 +1,7 @@
 jupyter
+
 pygame
 numpy
 Django
+
+pandas
