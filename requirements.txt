@@ -5,3 +5,4 @@ numpy
 Django
 
 pandas
+matplotlib
