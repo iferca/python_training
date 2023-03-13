@@ -6,3 +6,4 @@ Django
 
 pandas
 matplotlib
+tensorflow
